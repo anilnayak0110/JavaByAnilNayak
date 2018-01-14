@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Block Chain Home</title>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+ <script>
+  $(document).ready(function() {
+    $("#datepicker").datepicker();
+  });
+  </script>
+
+
+<script>
+        $(document).ready(function() {
+
+                $('#ajaxrequest').click(function() {
+                        $('.page-content').hide();
+                        var category = $(this).attr("data-category");
+                       // the URL for the request
+                        $.get('http://localhost:2013/BlockChain/alltransactions', {
+                                // Parameter to be sent to server side
+                                category : category
+                        }, function(jsonResponse) {
+                        	//console.log(jsonResponse);
+                        	//console.log("******" + JSON.stringify(jsonResponse)+" type "+typeof jsonResponse);
+                        	var data = JSON.parse(jsonResponse);
+                        	console.log("ISValid "+data.ISValid)
+                        	if(data.ISValid){
+                        		console.log("e#NTERED");
+                            	var transactionsTable = "<table border='1'><tr><th>Current Hash value</th><th>Previous hash value</th><th>Amount</th></tr>";
+                                    $.each(JSON.parse(data.Data), function(index, value) {
+                                    	//console.log(JSON.stringify(value));
+                                    	
+                                    	transactionsTable = transactionsTable + "<tr><td>"+value.currentHashValue+"</td><td>"+value.previousHashValue+"</td><td>"+value.amount+"</td></tr>";
+                                    });
+                                    transactionsTable = transactionsTable +"</table>";
+                                    $("#status").html("Block chain is valid:: "+data.ISValid);
+                                    $("#ajaxResp").html(transactionsTable);
+                                    $('.page-content').show();
+                                    $('#status').show(); 
+                        	}
+                        	
+                        	console.log(data);
+                            
+                        });
+                });
+        });
+</script>
+<style type="text/css">
+ body {
+	background-image: url("images/images.png");
+	background-repeat: no-repeat;
+	background-position: center top;
+}
+h3 {
+	color: green;
+	text-align: center;
+	margin-top: 100px;
+}
+table{
+   margin: 0 auto;
+}
+td {
+	color: green;
+}
+</style>
+</head>
+<body>
+<form action="transactions" method="get">
+   <h3>Make Transactions</h3>
+   <table>
+     <tr>
+       <td>Debitor Name</td>
+       <td><input type="text" name="Debitor_Name"></td>
+     </tr>
+     <tr>
+       <td>Debitor Account Number</td>
+       <td><input type="text" name="Debitor_Accno"></td>
+     </tr>
+     <tr>
+       <td>Amount</td>
+       <td><input type="text" name="Dbt_Amount"></td>
+     </tr>
+     <tr>
+       <td>Creditor Name</td>
+       <td><input type="text" name="Creditor_Name"></td>
+     </tr>
+     <tr>
+       <td>Creditor Account Number</td>
+       <td><input type="text" name="Creditor_Accno"></td>
+     </tr>
+      <tr>
+       <td>Transaction_Date</td>
+       <td><input id="datepicker" type="text" name="Transaction_Date"></td>
+     </tr>
+      <tr>
+      <td></td>
+      <td><input type="submit" value="Make Payment"></td>
+     </tr>
+   </table>
+</form>
+<!-- <a href="#" class="ajax-link" data-category="serial">Get All Transactions</a></li> -->
+
+<div class="main-content">
+        <div>
+              <ul>
+                <li><a href="#" id="ajaxrequest" data-category="serial">Get All Transactions</a></li>
+              </ul>
+			
+                <h3>Result will be displayed below via Ajax</h3>
+                <h2 id="status" style="display:none;"></h2>
+                <div id="ajaxResp">
+                        
+                </div>
+        </div>                  
+      </div>
+</body>
+</html>
