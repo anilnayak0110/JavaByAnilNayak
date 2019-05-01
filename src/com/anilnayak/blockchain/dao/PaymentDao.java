@@ -1,5 +1,31 @@
 package com.anilnayak.blockchain.dao;
 
+/*mysql> desc Transactions;
++------------------+-------------+------+-----+---------+-------+
+| Field            | Type        | Null | Key | Default | Extra |
++------------------+-------------+------+-----+---------+-------+
+| Debitor_Name     | varchar(64) | YES  |     | NULL    |       |
+| Debitor_Accno    | varchar(64) | YES  |     | NULL    |       |
+| Dbt_Amount       | float       | YES  |     | NULL    |       |
+| Creditor_Name    | varchar(64) | YES  |     | NULL    |       |
+| Creditor_Accno   | varchar(64) | YES  |     | NULL    |       |
+| Transaction_Date | varchar(24) | YES  |     | NULL    |       |
++------------------+-------------+------+-----+---------+-------+
+6 rows in set (0.36 sec)
+
+mysql> desc HashValue;
++---------------------+--------------+------+-----+---------+----------------+
+| Field               | Type         | Null | Key | Default | Extra          |
++---------------------+--------------+------+-----+---------+----------------+
+| id                  | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Amount              | float        | YES  |     | NULL    |                |
+| Previous_Hash_Value | varchar(128) | YES  |     | NULL    |                |
+| Current_Hash_Value  | varchar(128) | YES  |     | NULL    |                |
+| Hash_id             | int(11)      | YES  |     | NULL    |                |
++---------------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.07 sec)
+*/
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,7 +92,7 @@ public class PaymentDao {
 	    	int count =0;
 	    	try {
 	    		System.out.println("Hiii");
-				PreparedStatement preparedStatement = connection.prepareStatement("Select count(*) from HashValue" );
+				PreparedStatement preparedStatement = connection.prepareStatement("Select count(*) from Hashvalue" );
 				ResultSet rs = preparedStatement.executeQuery();
 				
 				while (rs.next()) {
@@ -87,7 +113,7 @@ public class PaymentDao {
 	    public String getPreviousHashValue(int rowCount){
 	    	String currentHashValue = "0";
 	    	try {
-				PreparedStatement preparedStatement = connection.prepareStatement("SELECT Current_Hash_Value,(SELECT Current_Hash_Value FROM HashValue s1 WHERE s1.id < s.id ORDER BY id DESC LIMIT 1) as Current_Hash_Value FROM HashValue s WHERE id = ?" );
+				PreparedStatement preparedStatement = connection.prepareStatement("SELECT Current_Hash_Value,(SELECT Current_Hash_Value FROM Hashvalue s1 WHERE s1.id < s.id ORDER BY id DESC LIMIT 1) as Current_Hash_Value FROM Hashvalue s WHERE id = ?" );
 				preparedStatement.setInt(1, rowCount);
 				ResultSet rs = preparedStatement.executeQuery();
 				while (rs.next()) {
@@ -112,7 +138,7 @@ public class PaymentDao {
 	    public List<Block> getAllTransactions() {
 	        List<Block> block = new ArrayList<Block>();
 	        try {
-	        	PreparedStatement preparedStatement = connection.prepareStatement("select * from HashValue");
+	        	PreparedStatement preparedStatement = connection.prepareStatement("select * from Hashvalue");
 	            ResultSet rs = preparedStatement.executeQuery();
 	            while (rs.next()) {
 	            	Block b = new Block();
