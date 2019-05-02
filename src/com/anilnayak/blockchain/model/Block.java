@@ -10,8 +10,29 @@ public class Block {
 	public String currentHashValue;
 	public String previousHashValue;
 	public String data;
+	public String debitorName;
+	public String creditorName;
+	public String transactionDate;
 	public long timeStamp;
 	private int nonce;
+	public String getDebitorName() {
+		return debitorName;
+	}
+	public void setDebitorName(String debitorName) {
+		this.debitorName = debitorName;
+	}
+	public String getCreditorName() {
+		return creditorName;
+	}
+	public void setCreditorName(String creditorName) {
+		this.creditorName = creditorName;
+	}
+	public String getTransactionDate() {
+		return transactionDate;
+	}
+	public void setTransactionDate(String transactionDate) {
+		this.transactionDate = transactionDate;
+	}
 	private float amount;
 	
 	public Block(){
@@ -103,9 +124,12 @@ public class Block {
 	public String toString() {
 		return "Block [currentHashValue=" + currentHashValue
 				+ ", previousHashValue=" + previousHashValue + ", data=" + data
+				+ ", debitorName=" + debitorName + ", creditorName="
+				+ creditorName + ", transactionDate=" + transactionDate
 				+ ", timeStamp=" + timeStamp + ", nonce=" + nonce + ", amount="
 				+ amount + "]";
 	}
+	
 
 
 	
