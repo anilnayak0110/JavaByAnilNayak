@@ -8,6 +8,15 @@ public class Payment {
 	private String creditorName;
 	private String creditorAccNo;
 	private String txnDate;
+	private String txnId;
+
+	public String getTxnId() {
+		return txnId;
+	}
+
+	public void setTxnId(String txnId) {
+		this.txnId = txnId;
+	}
 
 	public int getTxn_id() {
 		return txn_id;
@@ -70,7 +79,10 @@ public class Payment {
 		return "Payment [txn_id=" + txn_id + ", debitorName=" + debitorName
 				+ ", debitorAccNo=" + debitorAccNo + ", amount=" + amount
 				+ ", creditorName=" + creditorName + ", creditorAccNo="
-				+ creditorAccNo + ", txnDate=" + txnDate + "]";
+				+ creditorAccNo + ", txnDate=" + txnDate + ", txnId=" + txnId
+				+ "]";
 	}
+
+	
 
 }
