@@ -20,7 +20,7 @@
                         $('.page-content').hide();
                         var category = $(this).attr("data-category");
                        // the URL for the request
-                        $.get('http://localhost:2013/BlockChain/alltransactions', {
+                        $.get('http://localhost:2019/BlockChain/alltransactions', {
                                 // Parameter to be sent to server side
                                 category : category
                         }, function(jsonResponse) {
@@ -30,11 +30,11 @@
                         	console.log("ISValid "+data.ISValid)
                         	if(data.ISValid){
                         		console.log("e#NTERED");
-                            	var transactionsTable = "<table border='1'><tr><th>Current Hash value</th><th>Previous hash value</th><th>Amount</th></tr>";
+                            	var transactionsTable = "<table border='1'><tr><th>Current Hash value</th><th>Previous hash value</th><th>Transaction Date</th><th>Amount</th><th>Debitor Name</th><th>Creditor Name</th></tr>";
                                     $.each(JSON.parse(data.Data), function(index, value) {
                                     	//console.log(JSON.stringify(value));
                                     	
-                                    	transactionsTable = transactionsTable + "<tr><td>"+value.currentHashValue+"</td><td>"+value.previousHashValue+"</td><td>"+value.amount+"</td></tr>";
+                                    	transactionsTable = transactionsTable + "<tr><td>"+value.currentHashValue+"</td><td>"+value.previousHashValue+"</td><td>"+value.transactionDate+"</td><td>"+value.amount+"</td><td>"+value.debitorName+"</td><td>"+value.creditorName+"</td></tr>";
                                     });
                                     transactionsTable = transactionsTable +"</table>";
                                     $("#status").html("Block chain is valid:: "+data.ISValid);
