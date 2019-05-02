@@ -43,11 +43,11 @@ public class PaymentDao {
 	        connection = Dbutil.getConnection();
 	    }
       
-	    public  int addPayment(Payment payment) {
+	    public  int addPayment(Payment payment, String txnId) {
 	    	 int res = 0;
 	        try {
 	            PreparedStatement preparedStatement = connection
-	                    .prepareStatement("insert into Transactions(Debitor_Name,Debitor_Accno,Dbt_Amount,Creditor_Name,Creditor_Accno,Transaction_Date) values (?, ?, ?, ?, ?, ? )");
+	                    .prepareStatement("insert into Transactions(Debitor_Name,Debitor_Accno,Dbt_Amount,Creditor_Name,Creditor_Accno,Transaction_Date,Txn_Id) values (?, ?, ?, ?, ?, ? ,?)");
 	            // Parameters start with 1
 	            preparedStatement.setString(1, payment.getDebitorName());
 	            preparedStatement.setString(2, payment.getDebitorAccNo());
@@ -55,6 +55,7 @@ public class PaymentDao {
 	            preparedStatement.setString(4, payment.getCreditorName());
 	            preparedStatement.setString(5, payment.getCreditorAccNo());
 	            preparedStatement.setString(6, payment.getTxnDate());
+	            preparedStatement.setString(7, txnId);
 	            res = preparedStatement.executeUpdate();
 	            System.out.println("Res:::"+res);
 	        	return res;
@@ -67,16 +68,17 @@ public class PaymentDao {
 	    }
 	    
 	    
-	    public  int addHashValue(Block block,float amount) {
+	    public  int addHashValue(Block block,float amount,String txnId) {
 	    	 int res = 0;
 	        try {
 	            PreparedStatement preparedStatement = connection
-	                    .prepareStatement("insert into Hashvalue(Amount,Previous_Hash_Value,Current_Hash_Value,Hash_id) values (?, ?, ?, ?)");
+	                    .prepareStatement("insert into Hashvalue(Amount,Previous_Hash_Value,Current_Hash_Value,Hash_id,Txn_Id) values (?, ?, ?, ?, ?)");
 	            // Parameters start with 1
 	            preparedStatement.setFloat(1, amount);
 	            preparedStatement.setString(2,block.getPreviousHashValue());
 	            preparedStatement.setString(3, block.getCurrentHashValue());
 	            preparedStatement.setInt(4,1);
+	            preparedStatement.setString(5,txnId);
 	         
 	            res = preparedStatement.executeUpdate();
 	            System.out.println("Res:::"+res);
@@ -138,14 +140,16 @@ public class PaymentDao {
 	    public List<Block> getAllTransactions() {
 	        List<Block> block = new ArrayList<Block>();
 	        try {
-	        	PreparedStatement preparedStatement = connection.prepareStatement("select * from Hashvalue");
+	        	PreparedStatement preparedStatement = connection.prepareStatement("select * from Hashvalue h, Transactions t where h.Txn_Id = t.Txn_Id");
 	            ResultSet rs = preparedStatement.executeQuery();
 	            while (rs.next()) {
 	            	Block b = new Block();
 	                b.setCurrentHashValue(rs.getString("Current_Hash_Value"));
 	                b.setPreviousHashValue(rs.getString("Previous_Hash_Value"));
 	                b.setAmount(rs.getFloat("Amount"));
-	               
+	                b.setDebitorName(rs.getString("Debitor_Name"));
+	                b.setCreditorName(rs.getString("Creditor_Name"));
+	                b.setTransactionDate(rs.getString("Transaction_Date"));
 	                block.add(b);
 	            }
 	        } catch (SQLException e) {
