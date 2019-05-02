@@ -2,18 +2,16 @@ package com.anilnayak.blockchain.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.anilnayak.blockchain.common.RandomString;
 import com.anilnayak.blockchain.dao.PaymentDao;
 import com.anilnayak.blockchain.model.Block;
 import com.anilnayak.blockchain.model.Payment;
-import com.google.gson.GsonBuilder;
 
 public class PaymentServlet extends HttpServlet {
 
@@ -51,7 +49,8 @@ public class PaymentServlet extends HttpServlet {
 		payment.setTxnDate(transactionDate);
 		
 		/*Add Payment Details into Database*/
-		int addPayment = dao.addPayment(payment);
+		String txnId = RandomString.getAlphaNumericString(8);
+		int addPayment = dao.addPayment(payment,txnId);
 		if(addPayment==1){
 			System.out.println("Payment Added !!!!!!");
 			//pw.println("Payment Added Successfully !!!!!");
@@ -82,7 +81,7 @@ public class PaymentServlet extends HttpServlet {
 		String previousHashValue = b.getPreviousHashValue();
 		String currentHashValue = b.getCurrentHashValue();
 		
-		int hashAdded = dao.addHashValue(b, debitorAmount);
+		int hashAdded = dao.addHashValue(b, debitorAmount,txnId);
 		
 		if(hashAdded==1){
 			System.out.println("HashValue Added !!!!!!");
