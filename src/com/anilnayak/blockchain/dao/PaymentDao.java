@@ -24,6 +24,28 @@ mysql> desc HashValue;
 | Hash_id             | int(11)      | YES  |     | NULL    |                |
 +---------------------+--------------+------+-----+---------+----------------+
 5 rows in set (0.07 sec)
+
+
+CREATE TABLE `transactions` (
+	`Debitor_Name` VARCHAR(64),
+	`Debitor_Accno` VARCHAR(64),
+	`Dbt_Amount` FLOAT,
+	`Creditor_Name` VARCHAR(64),
+	`Creditor_Accno` VARCHAR(64),
+	`Transaction_Date` VARCHAR(24),
+         Txn_Id VARCHAR(16)
+);
+
+CREATE TABLE `hashvalue` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+     `Amount` FLOAT,
+     `Previous_Hash_Value` VARCHAR(128),
+     `Current_Hash_Value` VARCHAR(128),
+     `Hash_id` INT,
+      Txn_Id varchar(16),
+      PRIMARY KEY (`id`)
+    );
+
 */
 
 import java.sql.Connection;
